@@ -1,0 +1,77 @@
+
+
+RaspPi3:
+1. Overwrite format SD card using official 'SD Card Formatter'
+2. Use BalenaEtcher to write raspbian buster.img onto the sd card
+(this is basic Raspbian, NOT Noobs)
+
+
+
+RaspPi3:
+1. Overwrite format SD card using official 'SD Card Formatter'
+2. Use BalenaEtcher to write raspbian stretch .img onto the sd card
+(this is basic Raspbian, NOT Noobs)
+3. insert card into Pi and startup and get GUI running with keyboard n mouse
+	a. set up wifi and get VNC if needed
+	b. update software
+	c. restart
+(4. at terminal prompt see what python versions u have: 
+	python --version 
+	python3 --version)
+5. Install Thonny
+	sudo apt-get update
+	sudo apt-get install python3-thonny
+6. Install OpenCV
+	sudo pip3 install opencv-python-headless
+		(this should get piwheels.org opencv ver. 3.4.4)
+	sudo pip3 install opencv2
+		(this should get piwheels.org opencv2 0.4)
+5. Get opencv missing dependancies:
+	pip3 install opencv-python; sudo apt-get install -y libcblas-dev libhdf5-dev libhdf5-serial-dev libatlas-base-dev libjasper-dev  libqtgui4  libqt4-test
+6. Get V4L2 latest package
+	sudo pip3 install v4l2
+		(pypi.org v4l2-0.2)
+7. Install Matplotlib and Numpy
+	sudo pip3 install matplotlib
+	may not need this: sudo pip3 install numpy
+8. Composite video enable (60Hz NTSC or 50Hz PAL)...
+9. pip3 install "picamera[array]" if you plan to use built-in PiRGBArray
+	if you get openBlas error when running any .py program then try pip3 uninstall numpy (maybe try the uninstall while in the .local/lib/python3.5 folder
+
+
+Enable output of COMPOSITE VIDEO (for transmitting on VTX of copter) 60Hz NTSC:
+1. do not use NOOBS as primary OS, use regular Raspbian
+2. in /boot/config.txt use 'nano' to change 
+	sdtv_mode=0
+	place # infront of hdmi_hotplug=1
+3. change Raspberry Pi config to use 720x480
+
+
+Enable serial port for SBUS:
+1. in /boot/config.txt use 'nano' to change
+	
+add the device overlay command for switching Bluetooth to
+miniUART (ttyS0) from PL011 (ttyAMA0) 
+	setting the ttyAMA0
+to GPIOs 14 and 15 (which are pins 8 and 10):
+
+		a. enable_uart=1
+
+		b. dtoverlay=pi3-miniuart-bt   (disable-bt)
+
+2. Perhaps need to get pyserial by using 'pip3 install pyserial'
+
+
+3. Use this Python3 code to setup serial port for 8E2 at 
+100,000 baud for SBUS:
+
+	from serial import Serial
+
+	ser=serial.Serial(port='/dev/ttyAMA0', baudrate=100000, parity='E', stopbits=2)
+
+	readin=ser.read(25)
+	Use "ser.reset_input_buffer()"
+
+
+
+ to clear the buffer after every read to make room for next data arrival
