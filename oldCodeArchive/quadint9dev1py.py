@@ -35,19 +35,39 @@ frameheight = int(480)
 
 # ---- Function definition for converting scales ------
 def remap(unscaled, to_min, to_max, from_min, from_max):
+    """"Remaps a value from one range to another."
+    Parameters:
+        - unscaled (int or float): Value to be remapped.
+        - to_min (int or float): Minimum value of the new range.
+        - to_max (int or float): Maximum value of the new range.
+        - from_min (int or float): Minimum value of the original range.
+        - from_max (int or float): Maximum value of the original range.
+    Returns:
+        - float: Remapped value within the new range.
+    Processing Logic:
+        - Calculates the proportion of the value in the original range.
+        - Scales the proportion to the new range.
+        - Adds the minimum value of the new range to the scaled proportion."""
+    
     return (to_max-to_min)*(unscaled-from_min)/(from_max-from_min)+to_min
 
 #----Function to measure CPU temp  use print(measure_temp())
 def measure_temp():
+        """"""
+        
         temp = os.popen("vcgencmd measure_temp").readline()
         return (temp.replace("temp=",""))
 
 #---- Function Timer, returns current time
 def how_long(start, activity):
+    """"""
+    
     print('%s time %.3fs' % (activity, time.time()-start))
     return time.time()
 
 def stop_loop(frame,cam):#break jumps us out of inner most loop and used in an if statement of the loop
+    """"""
+    
     print(measure_temp())
     print(type(frame))
     print(frame.shape)
@@ -57,6 +77,8 @@ def stop_loop(frame,cam):#break jumps us out of inner most loop and used in an i
     cam.release()
     
 def parse_serin(readin):#Bitwise or is |, regular or is ||   #Bitwise and is &, regular and is &&
+    """"""
+    
     achannel[0]  = ((readin[1]     | readin[2]<<8)                   & 0x07FF)
     achannel[1]  = ((readin[2]>>3  | readin[3]<<5)                   & 0x07FF)
     achannel[2]  = ((readin[3]>>6  | readin[4]<<2 | readin[5]<<10)   & 0x07FF)
@@ -75,6 +97,8 @@ def parse_serin(readin):#Bitwise or is |, regular or is ||   #Bitwise and is &, 
     achannel[15] = ((readin[21]>>5 | readin[22]<<3)                  & 0x07FF)
 
 def parse_serout(achannel,readin):#digichannel):
+    """"""
+    
     sendout[0] = 0x0F #valid first byte to flight controller
     sendout[1] =  (achannel[0]  & 0x07FF) & 0xFF #07FF is 11111111111 to filter value to 11bit
     sendout[2] =  (((achannel[0]  & 0x07FF) >> 8)  | ((achannel[1] << 3) & 0x07FF)) & 0xFF
@@ -102,6 +126,8 @@ def parse_serout(achannel,readin):#digichannel):
     sendout[24]=readin[24];#footer byte 0x00
 
 def return_mouse_click(event,x,y,flags,param):#special var return via global vars
+    """"""
+    
     global tpoint
     global clickflag
     global showblob
@@ -112,6 +138,8 @@ def return_mouse_click(event,x,y,flags,param):#special var return via global var
 
 
 def simple_tracker(tpoint,width,frame):#tpoint is [x,y] / width is frame width / frame is total camera pict
+    """"""
+    
     global clickflag
     global SelctPtValB
     width=300
@@ -181,6 +209,8 @@ def simple_tracker(tpoint,width,frame):#tpoint is [x,y] / width is frame width /
 
 
 def main():
+    """"""
+    
     global tpoint
     global SelctPtValB
     global clickflag
