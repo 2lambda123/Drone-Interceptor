@@ -32,19 +32,40 @@ frameheight = int(480)
 
 # ---- Function definition for converting scales ------
 def remap(unscaled, to_min, to_max, from_min, from_max):
+    """Remaps a value from one range to another.
+    Parameters:
+        - unscaled (int or float): Value to be remapped.
+        - to_min (int or float): Minimum value of the new range.
+        - to_max (int or float): Maximum value of the new range.
+        - from_min (int or float): Minimum value of the original range.
+        - from_max (int or float): Maximum value of the original range.
+    Returns:
+        - remapped (int or float): Value remapped to the new range.
+    Processing Logic:
+        - Linearly scales the value from the original range to the new range.
+        - Uses the formula: (to_max-to_min)*(unscaled-from_min)/(from_max-from_min)+to_min.
+        - Does not modify the original value.
+        - Handles both integer and float values."""
+    
     return (to_max-to_min)*(unscaled-from_min)/(from_max-from_min)+to_min
 
 #----Function to measure CPU temp  use print(measure_temp())
 def measure_temp():
+        """"""
+        
         temp = os.popen("vcgencmd measure_temp").readline()
         return (temp.replace("temp=",""))
 
 #---- Function Timer, returns current time
 def how_long(start, activity):
+    """"""
+    
     print('%s time %.3fs' % (activity, time.time()-start))
     return time.time()
 
 def stop_loop(frame,cam):#break jumps us out of inner most loop and used in an if statement of the loop
+    """"""
+    
     print(measure_temp())
     print(type(frame))
     print(frame.shape)
@@ -54,6 +75,8 @@ def stop_loop(frame,cam):#break jumps us out of inner most loop and used in an i
     cam.release()
     
 def parse_serin(readin):#Bitwise or is |, regular or is ||   #Bitwise and is &, regular and is &&
+    """"""
+    
     achannel[0]  = ((readin[1]     | readin[2]<<8)                   & 0x07FF)
     achannel[1]  = ((readin[2]>>3  | readin[3]<<5)                   & 0x07FF)
     achannel[2]  = ((readin[3]>>6  | readin[4]<<2 | readin[5]<<10)   & 0x07FF)
@@ -72,6 +95,8 @@ def parse_serin(readin):#Bitwise or is |, regular or is ||   #Bitwise and is &, 
     achannel[15] = ((readin[21]>>5 | readin[22]<<3)                  & 0x07FF)
 
 def parse_serout(achannel,readin):#digichannel):
+    """"""
+    
     sendout[0] = 0x0F #valid first byte to flight controller
     sendout[1] =  (achannel[0]  & 0x07FF) & 0xFF #07FF is 11111111111 to filter value to 11bit
     sendout[2] =  (((achannel[0]  & 0x07FF) >> 8)  | ((achannel[1] << 3) & 0x07FF)) & 0xFF
@@ -99,6 +124,8 @@ def parse_serout(achannel,readin):#digichannel):
     sendout[24]=readin[24];#footer byte 0x00
 
 def return_mouse_click(event,x,y,flags,param):#special var return via global vars
+    """"""
+    
     global tpoint
     global clickflag
     global showblob
@@ -119,6 +146,8 @@ def return_mouse_click(event,x,y,flags,param):#special var return via global var
 
 
 def simple_tracker(tpoint,width,frame):
+    """"""
+    
     global clickflag
     global SelctPtValB
     #if Target is dark,low values, wrt background; then expect Target values to be low
@@ -211,6 +240,8 @@ def simple_tracker(tpoint,width,frame):
 
 
 def ccblobfinder(ccframe):#CONNECTED COMPONENTS BLOB DETECTOR
+    """"""
+    
 #    fig=plt.figure()
     #ccframe=worked image where pixels being replaced by markers of blobs as neg numbers, -1 is first blob, -2 is 2nd blob, etc..
 #    print(np.amax(ccframe),' ccframe max val')
@@ -325,6 +356,8 @@ def ccblobfinder(ccframe):#CONNECTED COMPONENTS BLOB DETECTOR
 
 
 def main():
+    """"""
+    
 #    global tbox#required for mouse call function def return_mouse_click
     global tpoint
     global SelctPtValB

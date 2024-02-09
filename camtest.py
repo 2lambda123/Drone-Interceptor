@@ -3,6 +3,27 @@ import time
 import subprocess#for setting cam properties at shell level
 
 def stop_loop(frame,cam):#break jumps us out of inner most loop and used in an if statement of the loop
+    """Function:
+    def stop_loop(frame, cam):
+        Stops the loop and releases the camera resources.
+        Parameters:
+            - frame (numpy.ndarray): The current frame of the video.
+            - cam (cv2.VideoCapture): The camera object used for capturing video.
+        Returns:
+            - None: No return value.
+        Processing Logic:
+            - Prints the current temperature.
+            - Prints the type, shape, and data type of the frame.
+            - Releases the camera resources.
+            - Destroys all windows created by OpenCV.
+        print(measure_temp())
+        print(type(frame))
+        print(frame.shape)
+        print(frame.dtype)
+        cam.release()
+        cv2.destroyAllWindows()
+        cv2.destroyAllWindows()"""
+    
     print(measure_temp())
     print(type(frame))
     print(frame.shape)

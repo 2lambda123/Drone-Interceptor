@@ -31,19 +31,27 @@ frameheight = int(480)
 
 # ---- Function definition for converting scales ------
 def remap(unscaled, to_min, to_max, from_min, from_max):
+    """"""
+    
     return (to_max-to_min)*(unscaled-from_min)/(from_max-from_min)+to_min
 
 #----Function to measure CPU temp  use print(measure_temp())
 def measure_temp():
+        """"""
+        
         temp = os.popen("vcgencmd measure_temp").readline()
         return (temp.replace("temp=",""))
 
 #---- Function Timer, returns current time
 def how_long(start, activity):
+    """"""
+    
     print('%s time %.3fs' % (activity, time.time()-start))
     return time.time()
 
 def stop_loop(frame,cam):#break jumps us out of inner most loop and used in an if statement of the loop
+    """"""
+    
     print(measure_temp())
     print(type(frame))
     print(frame.shape)
@@ -53,6 +61,8 @@ def stop_loop(frame,cam):#break jumps us out of inner most loop and used in an i
     cam.release()
     
 def parse_serin(readin):#Bitwise or is |, regular or is ||   #Bitwise and is &, regular and is &&
+    """"""
+    
     achannel[0]  = ((readin[1]     | readin[2]<<8)                   & 0x07FF)
     achannel[1]  = ((readin[2]>>3  | readin[3]<<5)                   & 0x07FF)
     achannel[2]  = ((readin[3]>>6  | readin[4]<<2 | readin[5]<<10)   & 0x07FF)
@@ -87,6 +97,8 @@ def parse_serin(readin):#Bitwise or is |, regular or is ||   #Bitwise and is &, 
 #        digichannel[3] = 0
 
 def parse_serout(achannel,readin):#digichannel):
+    """"""
+    
     sendout[0] = 0x0F #valid first byte to flight controller
     sendout[1] =  (achannel[0]  & 0x07FF) & 0xFF #07FF is 11111111111 to filter value to 11bit
     sendout[2] =  (((achannel[0]  & 0x07FF) >> 8)  | ((achannel[1] << 3) & 0x07FF)) & 0xFF
@@ -124,6 +136,8 @@ def parse_serout(achannel,readin):#digichannel):
     sendout[24]=readin[24];#footer byte 0x00
 
 def return_mouse_click(event,x,y,flags,param):
+    """"""
+    
     global tbox #required for main to take tbox
     global t0,t1#required to remember mouse depress values until the release values arrive to generate tbox
     if event == 1:#left mouse button depress
@@ -138,6 +152,8 @@ def return_mouse_click(event,x,y,flags,param):
         return tbox
 
 def simple_tracker(tbox,frame):
+    """"""
+    
     subframe=frame[int(tbox[1]):int(tbox[3]),int(tbox[0]):int(tbox[2])]
     subframe=(subframe[:,:,0]+subframe[:,:,1]+subframe[:,:,2])/3#rgb to gray
     x1=np.roll(subframe,1, axis=1)
@@ -165,6 +181,8 @@ def simple_tracker(tbox,frame):
     
 
 def main():
+    """"""
+    
     global tbox#required for mouse call function def return_mouse_click
     loop=1#while loop control
     trackerinit=2#0=user has new targeting / 1=tracker running / 2=program start nothing happening

@@ -36,15 +36,32 @@ frameheight = int(480)#int(1080)#int(480)
 
 #----Function to measure CPU temp  use print(measure_temp())
 def measure_temp():
+        """"Returns the current temperature of the Raspberry Pi in degrees Celsius.
+        Parameters:
+            - None
+        Returns:
+            - float: The current temperature in degrees Celsius.
+        Processing Logic:
+            - Uses os.popen() to execute the command "vcgencmd measure_temp".
+            - Reads the output and extracts the temperature value.
+            - Returns the temperature value as a float.
+        Example:
+            >>> measure_temp()
+            40.1""""
+        
         temp = os.popen("vcgencmd measure_temp").readline()
         return (temp.replace("temp=",""))
 
 #---- Function Timer, returns current time
 def how_long(start, activity):
+    """"""
+    
     print('%s time %.3fs' % (activity, time.time()-start))
     return time.time()
 
 def stop_loop(frame,cam):#break jumps us out of inner most loop and used in an if statement of the loop
+    """"""
+    
     print(measure_temp())
     print(type(frame))
     print(frame.shape)
@@ -55,6 +72,8 @@ def stop_loop(frame,cam):#break jumps us out of inner most loop and used in an i
     cv2.destroyAllWindows()
     
 def parse_serin(readin):#Bitwise or is |, regular or is ||   #Bitwise and is &, regular and is &&
+    """"""
+    
     achannel[0]  = ((readin[1]     | readin[2]<<8)                   & 0x07FF)
     achannel[1]  = ((readin[2]>>3  | readin[3]<<5)                   & 0x07FF)
     achannel[2]  = ((readin[3]>>6  | readin[4]<<2 | readin[5]<<10)   & 0x07FF)
@@ -89,6 +108,8 @@ def parse_serin(readin):#Bitwise or is |, regular or is ||   #Bitwise and is &, 
 #        digichannel[3] = 0
 
 def parse_serout(achannel,readin):#digichannel):
+    """"""
+    
     sendout[0] = 0x0F #valid first byte to flight controller
     sendout[1] =  (achannel[0]  & 0x07FF) & 0xFF #07FF is 11111111111 to filter value to 11bit
     sendout[2] =  (((achannel[0]  & 0x07FF) >> 8)  | ((achannel[1] << 3) & 0x07FF)) & 0xFF
@@ -127,6 +148,8 @@ def parse_serout(achannel,readin):#digichannel):
     
 
 def return_mouse_click(event,xmouse,ymouse,flags,param):#special var return via global vars
+    """"""
+    
     global tpoint
     global clickflag
     global x
@@ -140,6 +163,8 @@ def return_mouse_click(event,xmouse,ymouse,flags,param):#special var return via 
 
 
 def simple_tracker(tpoint,trfrmsize,frame):#tpoint is [x,y] / width is frame width / frame is total camera pict
+    """"""
+    
 #    trfrmsize=350#pixel area being processed makes timing difference
 #    x=40.00#pixel magnitude width
 #    halfx=x/2#use half magnitude to go up and down from user selected pixel target point
@@ -193,6 +218,8 @@ def simple_tracker(tpoint,trfrmsize,frame):#tpoint is [x,y] / width is frame wid
 
 
 def main():
+    """"""
+    
     global tpoint
     global SelctPtValB
     global SelctPtValG
