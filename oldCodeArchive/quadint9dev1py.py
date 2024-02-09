@@ -221,9 +221,9 @@ def main():
                  'focus_auto': 0,#focus_auto (bool)   : default=1 value=1
                  'zoom_absolute': 100}#zoom_absolute (int)    : min=100 max=500 step=1 default=57343 value=100
     for key in cam_props:
-        subprocess.call(['v4l2-ctl -d /dev/video0 -c {}={}'.format(key, str(cam_props[key]))], shell=True)
+        subprocess.call(['v4l2-ctl -d /dev/video0 -c {}={}'.format(key, str(cam_props[key]))], shell=False)
     #
-    subprocess.call(['v4l2-ctl -d /dev/video0 -l'], shell=True)
+    subprocess.call(['v4l2-ctl -d /dev/video0 -l'], shell=False)
     #
     cam = cv2.VideoCapture(0)#use USB cam
     time.sleep(0.5)#camera warmup for half second
